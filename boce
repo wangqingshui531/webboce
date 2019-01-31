@@ -7,7 +7,6 @@ from selenium.webdriver.common.by import By
 import dnsqry
 from mylog import log
 
-
 driver = None
 timeout = 60
 sleeptime = 180
