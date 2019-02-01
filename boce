@@ -12,7 +12,7 @@ timeout = 60
 sleeptime = 180
 #三分钟一次总耗时约四小时
 bocecnt=79
-
+#four
 try:
     site=dnsqry.JudSiteByHost()
 
