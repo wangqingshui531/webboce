@@ -1,6 +1,6 @@
 from decimal import getcontext, Decimal
 import time
-import mylog
+import dnsqry
 
 class log:
     fo = None
@@ -13,7 +13,7 @@ class log:
             self.filename = filepath
 
     def logspendtime(self,pages,spend):
-        site = mylog.JudSiteByHost()
+        site = dnsqry.JudSiteByHost()
         self.fo = open(self.filename, "a+")
         strcurtime = time.strftime("%D%H%M%S", time.localtime())
         strspend = str(Decimal(str(spend)).quantize(Decimal('0.00')))
