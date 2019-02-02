@@ -4,68 +4,47 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.by import By
 #from selenium.webdriver.common.keys import Keys
-import dnsqry
 from mylog import log
 
 driver = None
 timeout = 60
 sleeptime = 180
 #三分钟一次总耗时约四小时
-bocecnt=79
+bocecnt=20
+pages = "网厅首页"
 
-try:
-    site=dnsqry.JudSiteByHost()
+#打开结果文件
+logger=log()
 
-    #打开结果文件
-    logger=log()
-    logger.open()
+#chromedriver = "C:\Program Files (x86)\Google\Chrome\Application\chromedriver"
+for i in range(bocecnt):
+    try:
+        print("start get web %d" % i)
+        #driver.refresh()
+        driver = webdriver.Firefox()
+        start = time.time()
+        driver.get('http:\\service.js.10086.cn')
+        loc = (By.ID, 'compObshFloorKd')
+        wait = WebDriverWait(driver, timeout).until(expected_conditions.presence_of_element_located(loc))
+        # WebDriverWait(driver,10).until(EC.text_to_be_present_in_element((By.ID,"//*[@id='showAlt']"),u'设置'))
+        print(str(i) + driver.title)
+        logger.logspendtime(pages,time.time()-start)
+        print("spend time " + str(time.time()-start) + "s")
+        driver.quit()
+        driver = None
+        time.sleep(sleeptime)
+    except Exception as err:
+        print(err)
+        logger.logspendtime(pages,timeout)
+        print("err happend. spend time " + str(timeout) + "s")
+        if driver != None:
+            driver.quit()
+        time.sleep(sleeptime)
 
-    #chromedriver = "C:\Program Files (x86)\Google\Chrome\Application\chromedriver"
-    driver = webdriver.Firefox()
-#ele = WebDriverWait(driver,10).until(EC.presence_of_element_located(locator))
-
-    start=time.time()
-    #driver.get('http:\\www.baidu.com')
-    driver.get('http:\\service.js.10086.cn')
-    loc=(By.ID,'compObshFloorKd')
-    wait = WebDriverWait(driver,timeout).until(expected_conditions.presence_of_element_located(loc))
-    #WebDriverWait(driver,10).until(EC.text_to_be_present_in_element((By.ID,"//*[@id='showAlt']"),u'设置'))
-    print("first " + driver.title)
+if driver != None:
+    #program finish, run driver.quit()
     driver.quit()
 
-    logger.logspendtime(site,time.time()-start)
-    print("spend time " + str(time.time()-start) + "s")
-    time.sleep(sleeptime)
-
-    for i in range(bocecnt):
-        try:
-            print("start refresh")
-            #driver.refresh()
-            driver = webdriver.Firefox()
-            start = time.time()
-            driver.get('http:\\service.js.10086.cn')
-            loc = (By.ID, 'compObshFloorKd')
-            wait = WebDriverWait(driver, timeout).until(expected_conditions.presence_of_element_located(loc))
-            # WebDriverWait(driver,10).until(EC.text_to_be_present_in_element((By.ID,"//*[@id='showAlt']"),u'设置'))
-            print(str(i) + driver.title)
-            logger.logspendtime(site,time.time()-start)
-            print("spend time " + str(time.time()-start) + "s")
-            driver.quit()
-            time.sleep(sleeptime)
-        except Exception as err:
-            print(err)
-            logger.logspendtime(site, 120)
-            print("spend time " + str(120) + "s")
-            if driver != None:
-                driver.quit()
-            time.sleep(sleeptime)
-
-    logger.close()
-except Exception as err:
-    print(err)
-    if driver != None:
-        driver.quit()
-    logger.close()
 
 
 
